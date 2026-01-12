@@ -19,7 +19,6 @@ Pod::Spec.new do |s|
   
   # Flutter dependencies
   s.dependency 'Flutter'
-  s.dependency 'FlutterPluginRegistrant'
   
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
