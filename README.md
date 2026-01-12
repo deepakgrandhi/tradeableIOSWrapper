@@ -7,7 +7,7 @@ Native iOS framework for embedding Flutter trading widgets in your iOS app.
 Add to your `Podfile`:
 
 ```ruby
-platform :ios, '13.0'
+platform :ios, '15.0'
 
 # Setup Flutter first
 flutter_module_path = 'flutter_module'
@@ -92,7 +92,7 @@ TradeableFlutterNavigator.shared.goBack()
 
 ## Requirements
 
-- iOS 13.0+
+- iOS 15.0+
 - Xcode 14.0+
 - Swift 5.0+
 - Flutter SDK installed

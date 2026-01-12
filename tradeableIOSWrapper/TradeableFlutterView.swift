@@ -55,9 +55,7 @@ public struct TradeableFlutterView: View {
                 FlutterContainer(
                     initialData: prepareData(mode: "card"),
                     onClose: {
-                        withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                            isCardFlipped = false
-                        }
+                        isCardFlipped = false
                     }
                 )
                 .frame(width: width, height: height)
@@ -70,9 +68,7 @@ public struct TradeableFlutterView: View {
     
     private var cardFrontView: some View {
         Button(action: {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                isCardFlipped = true
-            }
+            isCardFlipped = true
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
@@ -115,7 +111,7 @@ public struct TradeableFlutterView: View {
                 .cornerRadius(10)
             }
         }
-        .fullScreenCover(isPresented: $showFullscreen) {
+        .sheet(isPresented: $showFullscreen) {
             FlutterFullscreenView(
                 isPresented: $showFullscreen,
                 data: prepareData(mode: "fullscreen")
