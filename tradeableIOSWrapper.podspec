@@ -22,8 +22,13 @@ Pod::Spec.new do |s|
   
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
+    'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) FLUTTER_ROOT=$(SRCROOT)/flutter_module',
+    'OTHER_SWIFT_FLAGS' => '$(inherited) -suppress-warnings'
   }
   
-  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  s.user_target_xcconfig = { 
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/flutter_module/.ios/Flutter'
+  }
 end
