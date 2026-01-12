@@ -17,25 +17,6 @@ Pod::Spec.new do |s|
   s.source_files = 'tradeableIOSWrapper/**/*.{h,m,swift}'
   s.public_header_files = 'tradeableIOSWrapper/**/*.h'
   
-  # Flutter module dependency
-  flutter_module_path = 'flutter_module'
-  
-  s.prepare_command = <<-CMD
-    if [ ! -d "#{flutter_module_path}" ]; then
-      git clone https://github.com/deepakgrandhi/tradeable_flutter_sdk_module.git #{flutter_module_path}
-    fi
-    cd #{flutter_module_path} && git pull origin main && flutter pub get
-  CMD
-  
-  # Load Flutter pods
-  s.script_phases = [
-    {
-      :name => 'Setup Flutter',
-      :script => 'cd flutter_module && flutter pub get',
-      :execution_position => :before_compile
-    }
-  ]
-  
   # Flutter dependencies
   s.dependency 'Flutter'
   s.dependency 'FlutterPluginRegistrant'
