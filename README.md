@@ -7,26 +7,30 @@ Native iOS framework for embedding Flutter trading widgets in your iOS app.
 Add to your `Podfile`:
 
 ```ruby
-pod 'tradeableIOSWrapper', :git => 'https://github.com/deepakgrandhi/tradeableIOSWrapper.git'
+platform :ios, '13.0'
 
-# Add Flutter module
+# Setup Flutter first
 flutter_module_path = 'flutter_module'
+
+unless File.exist?(flutter_module_path)
+  system("git clone https://github.com/deepakgrandhi/tradeable_flutter_sdk_module.git #{flutter_module_path}")
+end
+
+system("cd #{flutter_module_path} && git pull origin main && flutter pub get")
+
+flutter_podhelper = File.join(flutter_module_path, '.ios', 'Flutter', 'podhelper.rb')
+if File.exist?(flutter_podhelper)
+  load flutter_podhelper
+end
 
 target 'YourApp' do
   use_frameworks!
   
-  # Install Flutter dependencies
-  unless File.exist?(flutter_module_path)
-    system("git clone https://github.com/deepakgrandhi/tradeable_flutter_sdk_module.git #{flutter_module_path}")
-  end
+  # Install Flutter pods BEFORE other pods
+  install_all_flutter_pods(flutter_module_path)
   
-  system("cd #{flutter_module_path} && git pull origin main && flutter pub get")
-  
-  flutter_podhelper = File.join(flutter_module_path, '.ios', 'Flutter', 'podhelper.rb')
-  if File.exist?(flutter_podhelper)
-    load flutter_podhelper
-    install_all_flutter_pods(flutter_module_path)
-  end
+  # Then add tradeableIOSWrapper
+  pod 'tradeableIOSWrapper', :git => 'https://github.com/deepakgrandhi/tradeableIOSWrapper.git'
 end
 
 post_install do |installer|
@@ -96,14 +100,8 @@ TradeableFlutterNavigator.shared.goBack()
 ## Quick Test
 
 To test this framework immediately, provide consumers:
-1. **Git SSH access** to both repositories
-2. **Repository URLs**: 
-   - `git@github.com:deepakgrandhi/tradeableIOSWrapper.git`
-   - `git@github.com:deepakgrandhi/tradeable_flutter_sdk_module.git`
-3. **Sample Podfile** (see Installation section above)
-4. **Sample Code** (see Usage section above)
+1. **Repository URL**: `https://github.com/deepakgrandhi/tradeableIOSWrapper.git`
+2. **Sample Podfile** (see Installation section above)
+3. **Sample Code** (see Usage section above)
 
 Consumers can create a new iOS app and add the framework using the Podfile configuration.
-Repository URL**: `https://github.com/deepakgrandhi/tradeableIOSWrapper.git`
-2. **Sample Podfile** (see Installation section above)
-3
