@@ -89,7 +89,7 @@ public struct TradeableFlutterView: View {
                         .font(.system(size: 50))
                         .foregroundColor(.white)
                     Text("Tap to Flip")
-                        .font(.title3)
+                        .font(.headline)
                         .foregroundColor(.white)
                 }
             }
