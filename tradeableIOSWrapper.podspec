@@ -8,8 +8,8 @@ Pod::Spec.new do |s|
                        DESC
   s.homepage         = 'https://github.com/deepakgrandhi/tradeableIOSWrapper'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Deepak Grandhi' => 'your.email@example.com' }
-  s.source           = { :git => 'https://github.com/deepakgrandhi/tradeableIOSWrapper.git', :tag => s.version.to_s }
+  s.author           = { 'Deepak Grandhi' => 'deepakgrandhi@gmail.com' }
+  s.source           = { :git => 'https://github.com/deepakgrandhi/tradeableIOSWrapper.git', :branch => 'main' }
   
   s.ios.deployment_target = '13.0'
   s.swift_version = '5.0'

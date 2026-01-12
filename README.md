@@ -7,7 +7,7 @@ Native iOS framework for embedding Flutter trading widgets in your iOS app.
 Add to your `Podfile`:
 
 ```ruby
-pod 'tradeableIOSWrapper', :git => 'https://github.com/deepakgrandhi/tradeableIOSWrapper.git', :tag => '1.0.0'
+pod 'tradeableIOSWrapper', :git => 'https://github.com/deepakgrandhi/tradeableIOSWrapper.git'
 
 # Add Flutter module
 flutter_module_path = 'flutter_module'
