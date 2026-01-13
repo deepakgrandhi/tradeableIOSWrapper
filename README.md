@@ -50,6 +50,46 @@ pod install
 import tradeableIOSWrapper
 ```
 
+### Authentication & Initialization
+
+Before displaying any Flutter widgets, initialize TFS with authentication credentials:
+
+```swift
+let navigator = TradeableFlutterNavigator.shared
+
+navigator.initializeTFS(
+    baseUrl: "https://your-api-base-url.com",
+    authToken: "user_auth_token",
+    portalToken: "portal_token",
+    appId: "your_app_id",
+    clientId: "your_client_id",
+    publicKey: "your_public_key"
+) { success, error in
+    if success {
+        print("TFS initialized successfully")
+        // Now safe to show Flutter widgets
+    } else {
+        print("TFS initialization failed: \(error ?? "Unknown error")")
+    }
+}
+```
+
+### Check Authentication Status
+```swift
+navigator.isAuthenticated { isAuth in
+    if isAuth {
+        // Show widgets
+    } else {
+        // Redirect to login
+    }
+}
+```
+
+### Logout
+```swift
+navigator.logout()
+```
+
 ### 1. Direct Display Mode
 ```swift
 TradeableFlutterView(

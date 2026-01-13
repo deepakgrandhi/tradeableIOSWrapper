@@ -8,7 +8,7 @@
 import Foundation
 import Flutter
 
-/// Public API for managing Flutter navigation
+/// Public API for managing Flutter navigation and authentication
 public class TradeableFlutterNavigator {
     public static let shared = TradeableFlutterNavigator()
     
@@ -17,7 +17,66 @@ public class TradeableFlutterNavigator {
         binaryMessenger: FlutterEngineHolder.shared.engine.binaryMessenger
     )
     
+    private lazy var authChannel = FlutterMethodChannel(
+        name: "embedded_flutter/auth",
+        binaryMessenger: FlutterEngineHolder.shared.engine.binaryMessenger
+    )
+    
     private init() {}
+    
+    // MARK: - Authentication
+    
+    /// Initialize TFS with authentication credentials
+    /// - Parameters:
+    ///   - baseUrl: API base URL
+    ///   - authToken: User authentication token
+    ///   - portalToken: Portal token
+    ///   - appId: Application ID
+    ///   - clientId: Client ID
+    ///   - publicKey: Public key for encryption
+    ///   - completion: Callback when initialization is complete
+    public func initializeTFS(
+        baseUrl: String,
+        authToken: String,
+        portalToken: String,
+        appId: String,
+        clientId: String,
+        publicKey: String,
+        completion: @escaping (Bool, String?) -> Void
+    ) {
+        let params: [String: Any] = [
+            "baseUrl": baseUrl,
+            "authToken": authToken,
+            "portalToken": portalToken,
+            "appId": appId,
+            "clientId": clientId,
+            "publicKey": publicKey
+        ]
+        
+        authChannel.invokeMethod("initializeTFS", arguments: params) { result in
+            if let error = result as? FlutterError {
+                completion(false, error.message)
+            } else if let success = result as? Bool {
+                completion(success, nil)
+            } else {
+                completion(true, nil)
+            }
+        }
+    }
+    
+    /// Check if user is authenticated
+    public func isAuthenticated(completion: @escaping (Bool) -> Void) {
+        authChannel.invokeMethod("isAuthenticated", arguments: nil) { result in
+            completion(result as? Bool ?? false)
+        }
+    }
+    
+    /// Logout user
+    public func logout() {
+        authChannel.invokeMethod("logout", arguments: nil)
+    }
+    
+    // MARK: - Navigation
     
     /// Navigate to a specific route in Flutter
     /// - Parameters:
