@@ -13,6 +13,7 @@ public struct TradeableFlutterView: View {
     let width: CGFloat
     let height: CGFloat
     let data: [String: Any]
+    let topicId: Int?
     
     @State private var isCardFlipped = false
     @State private var showFullscreen = false
@@ -21,12 +22,14 @@ public struct TradeableFlutterView: View {
         mode: DisplayMode = .direct,
         width: CGFloat = 320,
         height: CGFloat = 220,
-        data: [String: Any] = [:]
+        data: [String: Any] = [:],
+        topicId: Int? = nil
     ) {
         self.mode = mode
         self.width = width
         self.height = height
         self.data = data
+        self.topicId = topicId
     }
     
     public var body: some View {
@@ -125,6 +128,9 @@ public struct TradeableFlutterView: View {
         finalData["width"] = width
         finalData["height"] = height
         finalData["mode"] = mode
+        if let topicId = topicId {
+            finalData["topicId"] = topicId
+        }
         return finalData
     }
 }
