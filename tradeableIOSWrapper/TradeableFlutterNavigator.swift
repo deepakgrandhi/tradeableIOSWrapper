@@ -22,19 +22,10 @@ public class TradeableFlutterNavigator {
         binaryMessenger: FlutterEngineHolder.shared.engine.binaryMessenger
     )
     
-    private init() {}
+    private init() {
+        print("[TFS] TradeableFlutterNavigator initialized")
+    }
     
-    // MARK: - Authentication
-    
-    /// Initialize TFS with authentication credentials
-    /// - Parameters:
-    ///   - baseUrl: API base URL
-    ///   - authToken: User authentication token
-    ///   - portalToken: Portal token
-    ///   - appId: Application ID
-    ///   - clientId: Client ID
-    ///   - publicKey: Public key for encryption
-    ///   - completion: Callback when initialization is complete
     public func initializeTFS(
         baseUrl: String,
         authToken: String,
@@ -44,6 +35,11 @@ public class TradeableFlutterNavigator {
         publicKey: String,
         completion: @escaping (Bool, String?) -> Void
     ) {
+        print("[TFS] initializeTFS called")
+        print("[TFS] baseUrl: \(baseUrl)")
+        print("[TFS] appId: \(appId)")
+        print("[TFS] clientId: \(clientId)")
+        
         let params: [String: Any] = [
             "baseUrl": baseUrl,
             "authToken": authToken,
@@ -55,10 +51,13 @@ public class TradeableFlutterNavigator {
         
         authChannel.invokeMethod("initializeTFS", arguments: params) { result in
             if let error = result as? FlutterError {
+                print("[TFS] ❌ initializeTFS failed: \(error.message ?? "Unknown error")")
                 completion(false, error.message)
             } else if let success = result as? Bool {
+                print("[TFS] ✅ initializeTFS succeeded")
                 completion(success, nil)
             } else {
+                print("[TFS] ✅ initializeTFS completed")
                 completion(true, nil)
             }
         }
@@ -66,14 +65,20 @@ public class TradeableFlutterNavigator {
     
     /// Check if user is authenticated
     public func isAuthenticated(completion: @escaping (Bool) -> Void) {
+        print("[TFS] Checking if user is authenticated")
         authChannel.invokeMethod("isAuthenticated", arguments: nil) { result in
-            completion(result as? Bool ?? false)
+            let isAuth = result as? Bool ?? false
+            print("[TFS] isAuthenticated result: \(isAuth)")
+            completion(isAuth)
         }
     }
     
     /// Logout user
     public func logout() {
-        authChannel.invokeMethod("logout", arguments: nil)
+        print("[TFS] logout called")
+        authChannel.invokeMethod("logout", arguments: nil) { result in
+            print("[TFS] logout completed")
+        }
     }
     
     // MARK: - Navigation
@@ -83,16 +88,25 @@ public class TradeableFlutterNavigator {
     ///   - route: The route name to navigate to
     ///   - arguments: Optional data to pass to the route
     public func navigateTo(_ route: String, arguments: [String: Any]? = nil) {
+        print("[TFS] navigateTo: \(route)")
+        if let args = arguments {
+            print("[TFS] with arguments: \(args)")
+        }
         let params: [String: Any] = [
             "route": route,
             "arguments": arguments ?? [:]
         ]
-        methodChannel.invokeMethod("navigateTo", arguments: params)
+        methodChannel.invokeMethod("navigateTo", arguments: params) { result in
+            print("[TFS] navigateTo completed for route: \(route)")
+        }
     }
     
     /// Go back to the previous route
     public func goBack() {
-        methodChannel.invokeMethod("goBack", arguments: nil)
+        print("[TFS] goBack called")
+        methodChannel.invokeMethod("goBack", arguments: nil) { result in
+            print("[TFS] goBack completed")
+        }
     }
     
     /// Replace current route with a new one
@@ -100,11 +114,17 @@ public class TradeableFlutterNavigator {
     ///   - route: The route name to navigate to
     ///   - arguments: Optional data to pass to the route
     public func replace(_ route: String, arguments: [String: Any]? = nil) {
+        print("[TFS] replace route: \(route)")
+        if let args = arguments {
+            print("[TFS] with arguments: \(args)")
+        }
         let params: [String: Any] = [
             "route": route,
             "arguments": arguments ?? [:]
         ]
-        methodChannel.invokeMethod("replaceRoute", arguments: params)
+        methodChannel.invokeMethod("replaceRoute", arguments: params) { result in
+            print("[TFS] replace completed for route: \(route)")
+        }
     }
     
     /// Clear all routes and navigate to a new one
@@ -112,25 +132,36 @@ public class TradeableFlutterNavigator {
     ///   - route: The route name to navigate to
     ///   - arguments: Optional data to pass to the route
     public func popToRoot(_ route: String = "/", arguments: [String: Any]? = nil) {
+        print("[TFS] popToRoot: \(route)")
+        if let args = arguments {
+            print("[TFS] with arguments: \(args)")
+        }
         let params: [String: Any] = [
             "route": route,
             "arguments": arguments ?? [:]
         ]
-        methodChannel.invokeMethod("popToRoot", arguments: params)
+        methodChannel.invokeMethod("popToRoot", arguments: params) { result in
+            print("[TFS] popToRoot completed for route: \(route)")
+        }
     }
     
     /// Send data to the current Flutter view
     /// - Parameters:
     ///   - data: Dictionary of data to send
     public func sendData(_ data: [String: Any]) {
-        methodChannel.invokeMethod("receiveData", arguments: data)
+        print("[TFS] sendData: \(data)")
+        methodChannel.invokeMethod("receiveData", arguments: data) { result in
+            print("[TFS] sendData completed")
+        }
     }
     
     /// Register a handler for receiving data from Flutter
     /// - Parameter handler: Closure called when Flutter sends data
     public func registerDataHandler(_ handler: @escaping ([String: Any]) -> Void) {
+        print("[TFS] registerDataHandler called")
         methodChannel.setMethodCallHandler { call, result in
             if call.method == "sendData" {
+                print("[TFS] Received data from Flutter: \(call.arguments ?? [:])")
                 if let arguments = call.arguments as? [String: Any] {
                     handler(arguments)
                 }
